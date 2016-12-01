@@ -203,7 +203,7 @@ net_controller:
   network_members_type: "interface"
   network_members_name: "eth1"
 
-net_ceph-controller:
+net_ceph_storage:
   network_config_1_type: "interface"
   network_config_1_name: "eth0"
   network_config_2_type: "ovs_bridge"
