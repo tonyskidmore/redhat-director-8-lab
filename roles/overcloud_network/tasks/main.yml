@@ -7,6 +7,12 @@
     state: directory
   become: no
 
+- name: Copy Network Environment Template
+  template:
+    src: network-environment.j2
+    dest: "/home/{{ control_user }}/templates/network-environment.yaml"
+  become: no
+
 - name: Copy Compute Template
   template:
     src: compute.j2

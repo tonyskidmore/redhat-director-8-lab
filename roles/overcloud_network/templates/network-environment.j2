@@ -1,0 +1,49 @@
+# This template configures each role to use Vlans on a single nic for
+# each isolated network.
+# This template assumes use of network-isolation.yaml.
+#
+# FIXME: if/when we add functionality to heatclient to include heat
+# environment files we should think about using it here to automatically
+# include network-isolation.yaml.
+resource_registry:
+  OS::TripleO::BlockStorage::Net::SoftwareConfig: /home/stack/templates/nic-configs/cinder-storage.yaml
+  OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/templates/nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/templates/nic-configs/controller.yaml
+  OS::TripleO::ObjectStorage::Net::SoftwareConfig: /home/stack/templates/nic-configs/swift-storage.yaml
+  OS::TripleO::CephStorage::Net::SoftwareConfig: /home/stack/templates/nic-configs/ceph-storage.yaml
+
+parameter_defaults:
+  # This sets 'external_network_bridge' in l3_agent.ini to an empty string
+  # so that external networks act like provider bridge networks (they
+  # will plug into br-int instead of br-ex)
+  InternalApiNetCidr: {{ net_env.InternalApiNetCidr }}
+  TenantNetCidr: {{ net_env.TenantNetCidr }}
+  StorageNetCidr: {{ net_env.StorageNetCidr }}
+  StorageMgmtNetCidr: {{ net_env.StorageMgmtNetCidr }}
+  ManagementNetCidr: {{ net_env.ManagementNetCidr }}
+  ExternalNetCidr: {{ net_env.ExternalNetCidr }}
+  # Pools allocation ranges
+  InternalApiAllocationPools: [{'start': {{ net_env.InternalApiAllocationPoolStart }}, 'end': {{ net_env.InternalApiAllocationPoolEnd }}}]
+  TenantAllocationPools: [{'start': {{ net_env.TenantAllocationPoolStart }}, 'end': {{ net_env.TenantAllocationPoolEnd }}}]
+  StorageAllocationPools: [{'start': {{ net_env.StorageAllocationPoolStart }}, 'end': {{ net_env.StorageAllocationPoolEnd }}}]
+  StorageMgmtAllocationPools: [{'start': {{ net_env.StorageMgmtAllocationPoolStart }}, 'end': {{ net_env.StorageMgmtAllocationPoolEnd }}}]
+  ManagementAllocationPools: [{'start': {{ net_env.ManagementAllocationPoolStart }}, 'end': {{ net_env.ManagementAllocationPoolEnd }}}]
+  # Leave room for floating IPs in the External allocation pool
+  ExternalAllocationPools: [{'start': {{ net_env.ExternalAllocationPoolStart }}, 'end': {{ net_env.ExternalAllocationPoolEnd}}}]
+  # Set to the router gateway on the external network
+  ExternalInterfaceDefaultRoute: {{ net_env.ExternalInterfaceDefaultRoute }}
+  # Gateway router for the provisioning network (or Undercloud IP)
+  ControlPlaneDefaultRoute: {{ net_env.ControlPlaneDefaultRoute }}
+  # The IP address of the EC2 metadata server. Generally the IP of the Undercloud
+  EC2MetadataIp: {{ net_env.EC2MetadataIp }}
+  # Define the DNS servers (maximum 2) for the overcloud nodes
+  DnsServers: [{{ net_env.DnsServers1 }},{{ net_env.DnsServers2 }}]
+  # Define VLAN tags
+  InternalApiNetworkVlanID: {{ net_vlans.InternalApiNetworkVlanID }}
+  TenantNetworkVlanID: {{ net_vlans.TenantNetworkVlanID }}
+  StorageNetworkVlanID: {{ net_vlans.StorageNetworkVlanID }}
+  StorageMgmtNetworkVlanID: {{ net_vlans.StorageMgmtNetworkVlanID }}
+  ManagementNetworkVlanID: {{ net_vlans.ManagementNetworkVlanID }}
+  ExternalNetworkVlanID: {{ net_vlans.ExternalNetworkVlanID }}
+  # Set to "br-ex" if using floating IPs on native VLAN on bridge br-ex
+  NeutronExternalNetworkBridge: "''"
