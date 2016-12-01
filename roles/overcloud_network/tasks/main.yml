@@ -19,3 +19,9 @@
     dest: "/home/{{ control_user }}/templates/nic-configs/controller.yaml"
   become: no
 
+- name: Copy Ceph Storage Template
+  template:
+    src: ceph-storage.j2
+    dest: "/home/{{ control_user }}/templates/nic-configs/ceph-storage.yaml"
+  become: no
+
