@@ -1,0 +1,116 @@
+---
+
+- name: Generate SSH keypair
+  hosts: all
+  user: root
+  gather_facts: false
+
+  tasks:
+  - name: Run stat of root public key
+    stat:
+      path: /root/.ssh/id_rsa.pub
+    register: id_rsa
+    delegate_to: localhost
+
+  - name: Generate SSH keys
+    command: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    args:
+      creates: /root/.ssh/id_rsa
+    when: id_rsa.stat.exists == false
+    delegate_to: localhost
+
+- name: Copy public key
+  hosts: under
+  user: root
+  gather_facts: false
+
+  tasks:
+  - name: Check ansible connection
+    script: files/test_connection.sh {{ inventory_hostname }}
+    register: ping_result
+    delegate_to: localhost
+    ignore_errors: true
+    changed_when: false
+
+  - name: Run ssh-copy-id
+    vars:
+      - key_dest: "root@{{ inventory_hostname }}"
+    command: sshpass -p {{ root_password }} ssh-copy-id -i /root/.ssh/id_rsa.pub -o StrictHostKeyChecking=no {{ key_dest }}
+    when: ping_result.rc != 0
+    delegate_to: localhost
+    no_log: true
+
+- name: Create local ansible user
+  hosts: localhost
+  user: root
+  gather_facts: false
+
+  tasks:
+  - name: Create local ansible control user 
+    user: 
+      name: "{{ control_user }}"
+      password: "{{ control_password }}"
+      comment: "Ansible User" 
+      groups: wheel
+      generate_ssh_key: yes 
+      ssh_key_bits: 2048
+      state: present
+    register: create_control_user
+
+  - name: Allow all access to {{ control_user }} home directory
+    file:
+      path: "/home/{{ control_user }}"
+      state: directory
+      mode: 0777
+      recurse: yes
+
+- name: Create remote ansible control user 
+  hosts: under
+  gather_facts: false
+
+  vars:
+    - ansible_user: root
+    - ansible_ssh_private_key_file: /root/.ssh/id_rsa
+
+  tasks:
+  - name: Create ansible control user
+    user:
+      name: "{{ control_user }}"
+      password: "{{ control_password }}"
+      comment: "Ansible User"
+      groups: wheel
+      state: present
+    register: create_remote_control_user
+ 
+  - name: Authorized key upload
+    authorized_key: 
+      user: "{{ control_user }}"
+      key: "{{ lookup('file','/home/{{ control_user }}/.ssh/id_rsa.pub') }}"
+      path: "/home/{{ control_user }}/.ssh/authorized_keys"
+      manage_dir: yes
+ 
+  - name: Set up password-less sudo for {{ control_user }} user
+    copy:
+      content: "{{ control_user }} ALL=(ALL) NOPASSWD: ALL\n"
+      dest: "/etc/sudoers.d/{{ control_user }}"
+      owner: root
+      group: root
+      mode: 0440
+
+- name: Create directoris as {{ control_user }}
+  hosts: under
+  gather_facts: false
+  remote_user: "{{ control_user }}"
+  become: false
+
+  tasks:
+  - name: Create /home/{{ control_user }}/images
+    file:
+      name: /home/{{ control_user }}/images
+      state: directory
+
+  - name: Create /home/{{ control_user }}/images
+    file:
+      name: /home/{{ control_user }}/templates
+      state: directory
+

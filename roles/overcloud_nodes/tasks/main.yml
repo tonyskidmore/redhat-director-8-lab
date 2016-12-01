@@ -1,0 +1,46 @@
+---
+# tasks file for roles/overcloud_nodes
+
+- name: Create the Node Definition Template
+  template:
+    src: instackenv.j2
+    dest: /home/{{ control_user }}/instackenv.json
+  with_items: "{{ nodes }}"
+
+- block:
+
+  - name: Get Current Ironic Node Capabilities
+    shell: openstack baremetal show capabilities -f json
+    register: ironic_nodes
+    changed_when: False
+
+  - name: Capture JSON Output
+    set_fact:
+      os_nodes: "{{ ironic_nodes.stdout|from_json }}"
+
+  - name: Debug Overcloud Nodes
+    debug:
+      var: os_nodes
+      verbosity: 2
+
+  - name: Register OverCloud Nodes
+    shell: openstack baremetal import --json ~/instackenv.json
+    register: overcloud_nodes
+    when: os_nodes | length == 0
+
+  - name: Debug Overcloud Nodes
+    debug:
+      var: overcloud_nodes
+      verbosity: 2
+
+
+  environment:
+    NOVA_VERSION: "{{ undercloud_rc.NOVA_VERSION }}"
+    OS_PASSWORD: "{{ undercloud_password.stdout }}"
+    OS_AUTH_URL: "{{ undercloud_rc.OS_AUTH_URL }}"
+    OS_USERNAME: "{{ undercloud_rc.OS_USERNAME }}"
+    OS_TENANT_NAME: "{{ undercloud_rc.OS_TENANT_NAME }}"
+    COMPUTE_API_VERSION: "{{ undercloud_rc.COMPUTE_API_VERSION }}"
+    OS_NO_CACHE: "{{ undercloud_rc.OS_NO_CACHE }}"
+    OS_CLOUDNAME: "{{ undercloud_rc.OS_CLOUDNAME }}"
+    OS_IMAGE_API_VERSION: "{{ undercloud_rc.OS_IMAGE_API_VERSION }}"

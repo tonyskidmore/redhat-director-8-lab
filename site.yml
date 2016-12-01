@@ -1,0 +1,16 @@
+- hosts: under	
+  # become: yes
+  gather_facts: true
+  roles:
+   - network
+   - fix_dns
+   - hostconf
+   - fix_dns
+   - system-update
+   - fix_dns
+   - undercloud
+   - fix_dns
+   - { role: overcloud_nodes, tags: ['overcloud','overcloud_nodes'] }
+   - { role: overcloud_introspection, tags: ['overcloud','overcloud_introspection'] }
+   - { role: overcloud_storage, tags: ['overcloud','overcloud_storage'] }
+   - { role: overcloud_network, tags: ['overcloud','overcloud_network'] }

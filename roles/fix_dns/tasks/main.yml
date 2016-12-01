@@ -1,0 +1,8 @@
+---
+
+- name: Copy standard DNS information
+  template: 
+    src: resolv.j2 
+    dest: /etc/resolv.conf
+  become: true
+

@@ -1,0 +1,151 @@
+---
+# tasks file for roles/undercloud
+
+
+- name: Install undercloud packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - python-tripleoclient
+    - openstack-utils
+  become: yes
+
+- name: Copy Undercloud Configuration Template
+  template:
+    src: undercloud.j2
+    dest: "/home/{{ control_user }}/undercloud.conf"
+  become: no
+
+- name: Install Undercloud
+  shell: openstack undercloud install 
+  args:
+    chdir: "/home/{{ control_user }}"
+    creates: stackrc
+  register: undercloud_install
+  # wait for job to complete 12200 = 2 hours
+  # async: 12200
+  # poll: 15
+  become: no
+
+- name: Show Undercloud Intall Results
+  debug:
+    var: undercloud_install
+    verbosity: 2
+
+- name: Get Undercloud Admin Password
+  shell: echo $(sudo hiera admin_password)
+  register: undercloud_password
+  changed_when: False
+  no_log: True
+
+
+# Check catalog and subnet DNS addresses using stackrc environment variables
+- block:
+
+  - name: Check Catalog
+    shell: openstack catalog list -f json
+    register: openstack_catalog
+    changed_when: False
+
+  - name: Capture JSON Output
+    set_fact:
+      os_catalog: "{{ openstack_catalog.stdout|from_json }}"
+
+  # Could loop through os_catalog JSON using this approach
+  # - name: List endpoints from catalog
+  #   debug:
+  #    msg: "Endpoint = {{ item.Name }} found"
+  #  with_items: "{{ os_catalog }}"
+
+  # Just count found endpoints - expecting "{{ undercloud_endpoints }}"
+  - name: Check Endpoint Count = {{ undercloud_endpoints }}
+    vars:
+      endpoint_count: "{{ os_catalog | length }}"
+    debug:
+      msg: "Endpoints found = {{ endpoint_count }}"
+    failed_when: os_catalog | length != undercloud_endpoints
+
+  - name: Get subnetid from single ctlplane network
+    shell: openstack network list -c Subnets -f value
+    register: undercloud_subnetid
+    changed_when: False
+
+  - name: Show Subnet ID
+    debug:
+      msg: "Found subnet ID  = {{  undercloud_subnetid.stdout }}"
+      verbosity: 2
+
+  - name: Get assigned DNS property value
+    shell: neutron subnet-show {{ undercloud_subnetid.stdout }} -c dns_nameservers -f value
+    register: undercloud_subnetdns
+    changed_when: False
+
+  - name: Show current DNS setting
+    debug:
+      msg: "Current DNS value = {{ undercloud_subnetdns.stdout }}"
+      verbosity: 2
+
+  - name: Set subnet DNS property setting"
+    shell: neutron subnet-update {{ undercloud_subnetid.stdout }}  --dns-nameserver {{ undercloud_dns }}
+    register: subnet_dns_set
+    when: undercloud_subnetdns.stdout != undercloud_dns
+
+  - name: Show updated DNS setting
+    debug:
+      msg: "Current DNS value = {{ subnet_dns_set.stdout }}"
+      verbosity: 2
+    when: subnet_dns_set.changed
+
+  - name: Install Image Packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - rhosp-director-images
+      - rhosp-director-images-ipa
+    become: yes
+
+  - name: Extract Images
+    unarchive:
+      src: "{{ item }}"
+      dest: /home/{{ control_user }}/images
+      remote_src: yes
+      creates: /home/{{ control_user }}/images/ironic-python-agent.kernel
+    with_items: "{{ images }}"
+
+  - name: Get Current Image List
+    shell: openstack image list -f json
+    register: openstack_images
+    changed_when: False
+
+  - name: Debug Image List
+    debug:
+      var: openstack_images
+      verbosity: 2
+
+  - name: Capture JSON Output
+    set_fact:
+      os_images: "{{ openstack_images.stdout|from_json }}"
+
+  - name: Upload Images
+    shell: openstack overcloud image upload --image-path /home/{{ control_user }}/images/
+    register: upload_images
+    when: os_images | length == 0
+
+  - name: Debug Upload Images
+    debug:
+      var: upload_images
+      verbosity: 2
+    when: upload_images.changed
+
+  environment:
+    NOVA_VERSION: "{{ undercloud_rc.NOVA_VERSION }}"
+    OS_PASSWORD: "{{ undercloud_password.stdout }}"
+    OS_AUTH_URL: "{{ undercloud_rc.OS_AUTH_URL }}"
+    OS_USERNAME: "{{ undercloud_rc.OS_USERNAME }}"
+    OS_TENANT_NAME: "{{ undercloud_rc.OS_TENANT_NAME }}"
+    COMPUTE_API_VERSION: "{{ undercloud_rc.COMPUTE_API_VERSION }}"
+    OS_NO_CACHE: "{{ undercloud_rc.OS_NO_CACHE }}"
+    OS_CLOUDNAME: "{{ undercloud_rc.OS_CLOUDNAME }}"
+    OS_IMAGE_API_VERSION: "{{ undercloud_rc.OS_IMAGE_API_VERSION }}"

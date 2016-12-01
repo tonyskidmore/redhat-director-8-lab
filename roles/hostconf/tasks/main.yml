@@ -1,0 +1,25 @@
+---
+# tasks file for roles/hostconf
+- name: Configure /etc/hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.0\.1\s+localhost\s+localhost.localdomain\s+localhost4\s+localhost4.localdomain4$'
+    line: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 {{ ansible_fqdn }} {{ ansible_hostname }}"
+    backup: yes
+    backrefs: yes
+  become: true
+
+- name: Stop and disable firewalld service
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+  ignore_errors: true
+  register: service_firewalld
+  become: true
+
+- name: Show firewalld variable
+  debug:
+    var: service_firewalld
+    verbosity: 2
+

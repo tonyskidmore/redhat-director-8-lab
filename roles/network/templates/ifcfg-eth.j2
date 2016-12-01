@@ -1,0 +1,8 @@
+DEVICE=eth{{ item.device_id }}{{ item.vlan_id }}
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR={{ item.ip_address }}
+PREFIX={{ item.prefix }}
+NETWORK={{ item.ip_network }}
+VLAN=yes
+

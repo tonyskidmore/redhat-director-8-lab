@@ -1,0 +1,14 @@
+---
+
+- name: Create /home/{{ control_user }}/templates
+  file:
+    name: /home/{{ control_user }}/templates
+    state: directory
+  become: no
+
+- name: Copy Storage Template
+  template:
+    src: storage-environment.j2
+    dest: "/home/{{ control_user }}/templates/storage-environment.yaml"
+  become: no
+

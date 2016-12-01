@@ -1,0 +1,206 @@
+---
+control_user: stack
+control_password: r3dh4t1!
+root_password: r3dh4t1!
+
+domain: rhpds.opentlc.com
+dns1_server_ip: "4.2.2.1"
+dns2_server_ip: "192.168.1.252" 
+ 
+networks:
+  - vlan_id: ".100"
+    ip_address: "10.1.1.1"
+    ip_network: "10.1.1.0"
+    device_id: "0"    
+    prefix: "24"
+  - vlan_id: ".201"
+    ip_address: "172.16.0.1"
+    ip_network: "172.16.0.0" 
+    device_id: "0"
+    prefix: "24"
+  - vlan_id: ".202"
+    ip_address: "172.17.0.1"
+    ip_network: "172.17.0.0" 
+    device_id: "0"
+    prefix: "24"
+  - vlan_id: ".203"
+    ip_address: "172.18.0.1"
+    ip_network: "172.18.0.0" 
+    device_id: "0"
+    prefix: "24"    
+  - vlan_id: ".204"
+    ip_address: "172.19.0.1"
+    ip_network: "172.19.0.0" 
+    device_id: "0"
+    prefix: "24"
+  - vlan_id: ".205"
+    ip_address: "172.20.0.1"
+    ip_network: "172.20.0.0" 
+    device_id: "0"
+    prefix: "24"    
+
+undercloud:
+  local_ip: 192.0.2.1/24
+  image_path: /home/stack/images
+  network_gateway: 192.0.2.1
+  undercloud_public_vip: 192.0.2.2
+  undercloud_admin_vip: 192.0.2.3
+  local_interface: eth1
+  network_cidr: 192.0.2.0/24
+  masquerade_network: 192.0.2.0/24
+  dhcp_start: 192.0.2.5
+  dhcp_end: 192.0.2.24
+  inspection_interface: br-ctlplane
+  inspection_iprange: 192.0.2.100,192.0.2.120
+  inspection_extras: false
+  inspection_runbench: false
+  undercloud_debug: true
+  enable_tempest: true
+  ipxe_deploy: true
+  store_events: false
+
+undercloud_dns: 192.0.2.254
+undercloud_endpoints: 9
+
+undercloud_rc:
+  NOVA_VERSION: 1.1
+  # OS_PASSWORD: $(sudo hiera admin_password)
+  OS_AUTH_URL: http://192.0.2.1:5000/v2.0
+  OS_USERNAME: admin
+  OS_TENANT_NAME: admin
+  COMPUTE_API_VERSION: 1.1
+  OS_NO_CACHE: True
+  OS_CLOUDNAME: undercloud
+  OS_IMAGE_API_VERSION: 1
+
+images:
+  - /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar
+  - /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar
+
+nodes:
+  - name: "ctrl01"
+    mac: "2c:c2:60:01:02:02"
+    pm_addr: "192.0.2.221"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "control"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ctrl02"
+    mac: "2c:c2:60:01:02:03"
+    pm_addr: "192.0.2.222"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "control"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ctrl03"
+    mac: "2c:c2:60:01:02:04"
+    pm_addr: "192.0.2.223"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "control"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "compute01"
+    mac: "2c:c2:60:01:02:05"
+    pm_addr: "192.0.2.224"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "compute"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "compute02"
+    mac: "2c:c2:60:01:02:06"
+    pm_addr: "192.0.2.225"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "compute"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ceph01"
+    mac: "2c:c2:60:01:02:07"
+    pm_addr: "192.0.2.226"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "ceph-storage"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ceph02"
+    mac: "2c:c2:60:01:02:08"
+    pm_addr: "192.0.2.227"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "ceph-storage"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ceph03"
+    mac: "2c:c2:60:01:02:09"
+    pm_addr: "192.0.2.228"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "ceph-storage"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+  - name: "ceph04"
+    mac: "2c:c2:60:01:02:10"
+    pm_addr: "192.0.2.229"
+    pm_password: "redhat"
+    pm_type: "pxe_ipmitool"
+    pm_user: "admin"
+    profile: "ceph-storage"
+    boot_option: "local"
+    root_device:
+      property: "serial"
+      value: "QM00001"
+
+net_compute:
+  InternalApiNetworkVlanID: "201"
+  StorageNetworkVlanID: "203"
+  TenantNetworkVlanID: "202"
+  ManagementNetworkVlanID: "205"
+  network_config_1_type: "interface"
+  network_config_1_name: "eth0"
+  network_config_2_type: "ovs_bridge"
+  network_config_2_name: "{get_input: bridge_name}"
+  network_members_type: "interface"
+  network_members_name: "eth1"
+
+net_controller:
+  ExternalNetworkVlanID: "100"
+  InternalApiNetworkVlanID: "201"
+  StorageNetworkVlanID: "203"
+  StorageMgmtNetworkVlanID: "204"
+  TenantNetworkVlanID: "202"
+  ManagementNetworkVlanID: "205"
+  ExternalInterfaceDefaultRoute: "'10.1.1.1'"
+  network_config_1_type: "interface"
+  network_config_1_name: "eth0"
+  network_config_2_type: "ovs_bridge"
+  network_config_2_name: "{get_input: bridge_name}"
+  network_members_type: "interface"
+  network_members_name: "eth1"

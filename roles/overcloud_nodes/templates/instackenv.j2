@@ -1,0 +1,18 @@
+{
+    "nodes": [
+{% for item in nodes %}
+        {
+            "mac": [
+                "{{ item.mac }}"
+            ],
+            "name": "{{ item.name }}",
+            "pm_addr": "{{ item.pm_addr }}",
+            "pm_password": "{{ item.pm_password }}",
+            "pm_type": "{{ item.pm_type }}",
+            "pm_user": "{{ item.pm_user }}"
+        }{% if not loop.last %},
+{% endif %}
+{% endfor %}
+
+    ]
+}

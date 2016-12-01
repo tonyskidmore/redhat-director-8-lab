@@ -1,0 +1,21 @@
+---
+
+
+- name: Create /home/{{ control_user }}/templates/nic-configs
+  file:
+    name: /home/{{ control_user }}/templates/nic-configs
+    state: directory
+  become: no
+
+- name: Copy Compute Template
+  template:
+    src: compute.j2
+    dest: "/home/{{ control_user }}/templates/nic-configs/compute.yaml"
+  become: no
+
+- name: Copy Controller Template
+  template:
+    src: controller.j2
+    dest: "/home/{{ control_user }}/templates/nic-configs/controller.yaml"
+  become: no
+

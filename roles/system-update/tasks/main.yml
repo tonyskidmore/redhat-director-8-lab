@@ -1,0 +1,50 @@
+---
+# tasks file for roles/system-update
+
+- name: Get starting kernel version
+  shell:
+    rpm -q kernel --queryformat '%{installtime} %{version}-%{release}.%{arch}\n' | sort -n -k1 | tail -1 | cut -d ' ' -f 2
+  args:
+    warn: no
+  ignore_errors: true
+  register: start_kernel
+  changed_when: false
+
+- name: Show kernel
+  debug:
+    var: start_kernel.stdout
+    verbosity: 2
+
+- name: Perform system update
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+  register: yum_update
+  become: true
+
+- name: Show yum result
+  debug:
+    var: yum_update
+    verbosity: 2
+
+- name: Get ending kernel version
+  shell:
+    rpm -q kernel --queryformat '%{installtime} %{version}-%{release}.%{arch}\n' | sort -n -k1 | tail -1 | cut -d ' ' -f 2
+  args:
+    warn: no
+  ignore_errors: true
+  register: end_kernel
+  changed_when: false
+
+- name: Restart Server
+  shell: sleep 2 && shutdown -r now "Reboot triggered by Ansible"
+  async: 1
+  poll: 0
+  become: true
+  when: start_kernel.stdout != end_kernel.stdout
+  register: restart_server
+  ignore_errors: true
+  notify: 
+    - wait-for-server
+
