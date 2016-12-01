@@ -19,6 +19,12 @@
     dest: /home/{{ control_user }}/templates/nic-configs/cinder-storage.yaml
     remote_src: True
 
+- name: Copy Swift Storage Template
+  copy:
+    src: /usr/share/openstack-tripleo-heat-templates/network/config/single-nic-vlans/swift-storage.yaml
+    dest: /home/{{ control_user }}/templates/nic-configs/swift-storage.yaml
+    remote_src: True
+
 - name: Copy Compute Template
   template:
     src: compute.j2
