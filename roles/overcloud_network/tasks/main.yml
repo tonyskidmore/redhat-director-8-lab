@@ -13,6 +13,12 @@
     dest: "/home/{{ control_user }}/templates/network-environment.yaml"
   become: no
 
+- name: Copy Cinder Storage Template
+  copy:
+    src: /usr/share/openstack-tripleo-heat-templates/network/config/single-nic-vlans/cinder-storage.yaml
+    dest: /home/{{ control_user }}/templates/nic-configs/cinder-storage.yaml
+    remote_src: True
+
 - name: Copy Compute Template
   template:
     src: compute.j2
