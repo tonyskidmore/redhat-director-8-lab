@@ -34,19 +34,19 @@ parameters:
     description: IP address/subnet on the management network
     type: string
   InternalApiNetworkVlanID:
-    default: {{ net_compute.InternalApiNetworkVlanID }}
+    default: {{ net_vlans.InternalApiNetworkVlanID }}
     description: Vlan ID for the internal_api network traffic.
     type: number
   StorageNetworkVlanID:
-    default: {{ net_compute.StorageNetworkVlanID }}
+    default: {{ net_vlans.StorageNetworkVlanID }}
     description: Vlan ID for the storage network traffic.
     type: number
   TenantNetworkVlanID:
-    default: {{ net_compute.TenantNetworkVlanID }}
+    default: {{ net_vlans.TenantNetworkVlanID }}
     description: Vlan ID for the tenant network traffic.
     type: number
   ManagementNetworkVlanID:
-    default: {{ net_compute.ManagementNetworkVlanID }}
+    default: {{ net_vlans.ManagementNetworkVlanID }}
     description: Vlan ID for the management network traffic.
     type: number
   ControlPlaneSubnetCidr: # Override this via parameter_defaults

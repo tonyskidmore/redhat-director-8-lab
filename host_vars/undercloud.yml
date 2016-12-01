@@ -178,11 +178,15 @@ nodes:
       property: "serial"
       value: "QM00001"
 
-net_compute:
+net_vlans:
+  ExternalNetworkVlanID: "100"
   InternalApiNetworkVlanID: "201"
-  StorageNetworkVlanID: "203"
   TenantNetworkVlanID: "202"
-  ManagementNetworkVlanID: "205"
+  StorageNetworkVlanID: "203"
+  StorageMgmtNetworkVlanID: "204"
+  ManagementNetworkVlanID: "205" 
+
+net_compute:
   network_config_1_type: "interface"
   network_config_1_name: "eth0"
   network_config_2_type: "ovs_bridge"
@@ -191,12 +195,6 @@ net_compute:
   network_members_name: "eth1"
 
 net_controller:
-  ExternalNetworkVlanID: "100"
-  InternalApiNetworkVlanID: "201"
-  StorageNetworkVlanID: "203"
-  StorageMgmtNetworkVlanID: "204"
-  TenantNetworkVlanID: "202"
-  ManagementNetworkVlanID: "205"
   ExternalInterfaceDefaultRoute: "'10.1.1.1'"
   network_config_1_type: "interface"
   network_config_1_name: "eth0"
@@ -204,3 +202,12 @@ net_controller:
   network_config_2_name: "{get_input: bridge_name}"
   network_members_type: "interface"
   network_members_name: "eth1"
+
+net_ceph-controller:
+  network_config_1_type: "interface"
+  network_config_1_name: "eth0"
+  network_config_2_type: "ovs_bridge"
+  network_config_2_name: "{get_input: bridge_name}"
+  network_members_type: "interface"
+  network_members_name: "eth1" 
+
