@@ -45,6 +45,17 @@
   when: start_kernel.stdout != end_kernel.stdout
   register: restart_server
   ignore_errors: true
-  notify: 
-    - wait-for-server
+
+- name: Debug Restart Server
+  debug:
+    var: restart_server
+
+- name: Wait For Server
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 22
+    state: started
+    delay: 10
+    timeout: 300
+  delegate_to: localhost
 

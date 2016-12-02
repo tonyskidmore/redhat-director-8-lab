@@ -1,6 +1,6 @@
 ---
 
-- name: wait-for-server
+- name: waitforserver
   wait_for:
     host: "{{ inventory_hostname }}"
     port: 22
