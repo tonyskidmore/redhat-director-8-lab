@@ -28,9 +28,9 @@
     OS_CLOUDNAME: "{{ undercloud_rc.OS_CLOUDNAME }}"
     OS_IMAGE_API_VERSION: "{{ undercloud_rc.OS_IMAGE_API_VERSION }}"
 
-  - name: Debug deploy overcloud
-    debug:
-      var: deploy_overcloud
+- name: Debug deploy overcloud
+  debug:
+    var: deploy_overcloud
 
 
 
