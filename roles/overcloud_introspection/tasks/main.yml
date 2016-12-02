@@ -22,6 +22,11 @@
       var: node_introspection.stdout_lines
       verbosity: 2
 
+  - Fix local_gb Disk Size
+    shell: ironic node-update {{ item.name }} add properties/local_gb={{ item.root_device.local_gb }}'
+    register: local_gb
+    with_items: "{{ nodes }}"
+
   - name: Tag Nodes
     shell: ironic node-update {{ item.name }} add properties/capabilities='profile:{{ item.profile }},boot_option:local'
     register: tag_nodes
