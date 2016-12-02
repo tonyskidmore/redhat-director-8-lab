@@ -77,6 +77,14 @@ images:
   - /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar
   - /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar
 
+overcloud:
+  control_scale: "3"
+  compute_scale: "2"
+  ceph_storage_scale: "4"
+  ntp_server: "pool.ntp.org"
+  neutron_network_type: "vxlan"
+  neutron_tunnel_types: "vxlan"
+
 nodes:
   - name: "ctrl01"
     mac: "2c:c2:60:01:02:02"
