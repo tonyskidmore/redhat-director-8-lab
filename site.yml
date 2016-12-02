@@ -14,3 +14,4 @@
    - { role: overcloud_introspection, tags: ['overcloud','overcloud_introspection'] }
    - { role: overcloud_storage, tags: ['overcloud','overcloud_storage'] }
    - { role: overcloud_network, tags: ['overcloud','overcloud_network'] }
+   - { role: overcloud_deploy, tags: ['overcloud','overcloud_deploy'] }

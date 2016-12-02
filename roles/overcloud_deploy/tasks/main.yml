@@ -1,0 +1,36 @@
+---
+# tasks file for roles/overcloud_deploy
+
+- name:  Deploy the Overcloud
+  shell: >
+    openstack overcloud deploy --templates
+    -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml
+    -e /home/stack/templates/network-environment.yaml
+    -e /home/stack/templates/storage-environment.yaml
+    --control-flavor control
+    --compute-flavor compute
+    --ceph-storage-flavor ceph-storage
+    --control-scale {{ overcloud.control_scale }}
+    --compute-scale {{ overcloud.compute_scale }}
+    --ceph-storage-scale {{ overcloud.ceph_storage_scale }}
+    --ntp-server {{ overcloud.ntp_server }}
+    --neutron-network-type {{ overcloud.neutron_network_type }}
+    --neutron-tunnel-types {{ overcloud.neutron_tunnel_types }}
+  register: deploy_overcloud
+  environment:
+    NOVA_VERSION: "{{ undercloud_rc.NOVA_VERSION }}"
+    OS_PASSWORD: "{{ undercloud_password.stdout }}"
+    OS_AUTH_URL: "{{ undercloud_rc.OS_AUTH_URL }}"
+    OS_USERNAME: "{{ undercloud_rc.OS_USERNAME }}"
+    OS_TENANT_NAME: "{{ undercloud_rc.OS_TENANT_NAME }}"
+    COMPUTE_API_VERSION: "{{ undercloud_rc.COMPUTE_API_VERSION }}"
+    OS_NO_CACHE: "{{ undercloud_rc.OS_NO_CACHE }}"
+    OS_CLOUDNAME: "{{ undercloud_rc.OS_CLOUDNAME }}"
+    OS_IMAGE_API_VERSION: "{{ undercloud_rc.OS_IMAGE_API_VERSION }}"
+
+  - name: Debug deploy overcloud
+    debug:
+      var: deploy_overcloud
+
+
+
