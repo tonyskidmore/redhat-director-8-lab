@@ -8,6 +8,7 @@
    - fix_dns
    - system-update
    - fix_dns
+   - fix_dns
    - undercloud
    - fix_dns
    - { role: overcloud_nodes, tags: ['overcloud','overcloud_nodes'] }
