@@ -23,7 +23,7 @@
       verbosity: 2
 
   - Fix local_gb Disk Size
-    shell: ironic node-update {{ item.name }} add properties/local_gb={{ item.root_device.local_gb }}'
+    shell: ironic node-update {{ item.name }} add properties/local_gb={{ item.root_device.local_gb }}
     register: local_gb
     with_items: "{{ nodes }}"
 
