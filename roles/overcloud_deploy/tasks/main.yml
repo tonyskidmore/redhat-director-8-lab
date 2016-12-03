@@ -16,6 +16,8 @@
     --ntp-server {{ overcloud.ntp_server }}
     --neutron-network-type {{ overcloud.neutron_network_type }}
     --neutron-tunnel-types {{ overcloud.neutron_tunnel_types }}
+    args:
+      creates: tempest-deployer-input.conf
   register: deploy_overcloud
   environment:
     NOVA_VERSION: "{{ undercloud_rc.NOVA_VERSION }}"
