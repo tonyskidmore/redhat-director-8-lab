@@ -2,6 +2,8 @@
 ## backends. Defaults to Ceph used as a backend for Cinder, Glance and
 ## Nova ephemeral storage.
 parameter_defaults:
+  ExtraConfig:
+    ceph::profile::params::osds:
 
   #### BACKEND SELECTION ####
 
