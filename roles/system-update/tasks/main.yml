@@ -59,3 +59,8 @@
     timeout: 300
   delegate_to: localhost
 
+# for some reason the fix_dns role does not get called in the master playbook after this point os include it here
+- name: Fix DNS here
+  include_role:
+    name: fix_dns
+
