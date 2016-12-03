@@ -2,14 +2,14 @@
   # become: yes
   gather_facts: true
   roles:
-   - network
-   - fix_dns
-   - hostconf
-   - fix_dns
-   - system-update
-   - fix_dns
-   - fix_dns
-   - undercloud
+   - { role: network,tags: ['prep'] }
+   - { role: fix_dns,tags: ['prep'] }
+   - { role: hostconf,tags: ['prep'] }
+   - { role: fix_dns,tags: ['prep'] }
+   - { role: system-update,tags: ['prep'] }
+   - { role: fix_dns,tags: ['prep'] }
+   - { role: fix_dns,tags: ['prep'] }
+   - { role: undercloud, tags: ['undercloud'] }
    - fix_dns
    - { role: overcloud_nodes, tags: ['overcloud','overcloud_nodes'] }
    - { role: overcloud_introspection, tags: ['overcloud','overcloud_introspection'] }
