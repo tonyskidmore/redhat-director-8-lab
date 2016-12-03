@@ -20,13 +20,13 @@
 
 - name: Copy wipe-disks Heat Template
   copy:
-    src: files/wipe-disks.yaml
+    src: wipe-disks.yaml
     dest: "/home/{{ control_user }}/templates/firstboot/wipe-disks.yaml"
   become: no
 
 - name: Copy wipe-disk Bash Script
   copy:
-    src: files/wipe-disk.sh
+    src: wipe-disk.sh
     dest: "/home/{{ control_user }}/templates/firstboot/wipe-disk.sh"
   become: no
 
