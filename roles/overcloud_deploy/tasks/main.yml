@@ -1,6 +1,12 @@
 ---
 # tasks file for roles/overcloud_deploy
 
+- name: Get Undercloud Admin Password
+  shell: echo $(sudo hiera admin_password)
+  register: undercloud_password
+  changed_when: False
+  no_log: True
+
 - name:  Deploy the Overcloud
   shell: >
     openstack overcloud deploy --templates
