@@ -7,6 +7,10 @@
     dest: /home/{{ control_user }}/instackenv.json
   with_items: "{{ nodes }}"
 
+- name: Get Nodes Count
+  set_fact:
+    node_count: "{{ nodes|length }}"
+
 - block:
 
   - name: Get Current Ironic Node Capabilities
@@ -23,10 +27,15 @@
       var: os_nodes
       verbosity: 2
 
+   # baremetal import doesn't see to like importing existing node information
+   # ideally create instackenv.json based on nodes that do not already exist
+   # for now manually edit created instackenv.json and remove existing nodes
+   # if running this through on a second run with existing ironic nodes
   - name: Register OverCloud Nodes
     shell: openstack baremetal import --json ~/instackenv.json
     register: overcloud_nodes
     when: os_nodes | length == 0
+    # when: os_nodes | length != node_count
 
   - name: Debug Overcloud Nodes
     debug:
