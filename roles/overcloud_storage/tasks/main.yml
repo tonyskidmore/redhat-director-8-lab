@@ -12,3 +12,23 @@
     dest: "/home/{{ control_user }}/templates/storage-environment.yaml"
   become: no
 
+- name: Create /home/{{ control_user }}/templates/firstboot
+  file:
+    name: /home/{{ control_user }}/templates/firstboot
+    state: directory
+  become: no
+
+- name: Copy wipe-disks Heat Template
+  copy:
+    src: files/wipe-disks.yaml
+    dest: "/home/{{ control_user }}/templates/firstboot/wipe-disks.yaml"
+  become: no
+
+- name: Copy wipe-disk Bash Script
+  copy:
+    src: files/wipe-disk.sh
+    dest: "/home/{{ control_user }}/templates/firstboot/wipe-disk.sh"
+  become: no
+
+
+

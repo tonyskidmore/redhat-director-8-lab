@@ -5,6 +5,9 @@ parameter_defaults:
   ExtraConfig:
     ceph::profile::params::osds:
 
+resource_registry:
+  OS::TripleO::NodeUserData: /home/stack/templates/firstboot/wipe-disks.yaml
+
   #### BACKEND SELECTION ####
 
   ## Whether to enable iscsi backend for Cinder.
