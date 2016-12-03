@@ -7,7 +7,7 @@ cd redhat-director-8-lab
 
 touch ansible.log
 sudo ansible-playbook setup.yml
-read -p "Press any key to begin installation..."
+# read -p "Press any key to begin installation..."
 
 screen -S "shared" -d -m
 screen -r "shared" -X stuff $'cd redhat-director-8-lab\n'
