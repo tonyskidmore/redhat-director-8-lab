@@ -1,12 +1,12 @@
 ## A Heat environment file which can be used to set up storage
 ## backends. Defaults to Ceph used as a backend for Cinder, Glance and
 ## Nova ephemeral storage.
-parameter_defaults:
-  ExtraConfig:
-    ceph::profile::params::osds:
 
 resource_registry:
   OS::TripleO::NodeUserData: /home/stack/templates/firstboot/wipe-disks.yaml
+
+parameter_defaults:
+
 
   #### BACKEND SELECTION ####
 
@@ -62,3 +62,6 @@ resource_registry:
   ## Ceph admin key, e.g. 'AQDLOh1VgEp6FRAAFzT7Zw+Y9V6JJExQAsRnRQ=='
   # CephAdminKey: ''
 
+
+  ExtraConfig:
+    ceph::profile::params::osds:
