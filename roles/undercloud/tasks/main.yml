@@ -67,7 +67,8 @@
     failed_when: os_catalog | length != undercloud_endpoints
 
   - name: Get subnetid from single ctlplane network
-    shell: openstack network list -c Subnets -f value
+    # shell: openstack network list -c Subnets -f value
+    shell: openstack network list | grep ctlplane | awk '{print $6}'
     register: undercloud_subnetid
     changed_when: False
 
