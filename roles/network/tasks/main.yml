@@ -10,6 +10,7 @@
 - name: Debug Ethernet config files
   debug:
     var: network_template
+    verbosity: 2
 
 - name: Restart Network
   service:

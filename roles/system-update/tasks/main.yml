@@ -49,6 +49,7 @@
 - name: Debug Restart Server
   debug:
     var: restart_server
+    verbosity: 2
 
 - name: Wait For Server
   wait_for:
