@@ -69,8 +69,8 @@ resources:
         os_net_config:
           network_config:
             -
-              type: ovs_bridge
-              name: br-storage
+              type: {{ net_ceph_storage.network_config_1_type }}
+              name: {{ net_ceph_storage.network_config_1_name }}
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
               addresses:
@@ -87,10 +87,13 @@ resources:
                 -
                   default: true
                   next_hop: {get_param: ControlPlaneDefaultRoute}
+              type: {{ net_ceph_storage.network_config_2_type }}
+              name: {{ net_ceph_storage.network_config_2_name }}
+              use_dhcp: false
               members:
                 -
-                  type: interface
-                  name: nic1
+                  type: {{ net_ceph_storage.network_members_type }}
+                  name: {{ net_ceph_storage.network_members_name }}
                   # force the MAC address of the bridge to this interface
                   primary: true
                 -
