@@ -1,18 +1,68 @@
 - hosts: under	
-  # become: yes
   gather_facts: true
+
   roles:
-   - { role: network,tags: ['prep'] }
-   - { role: fix_dns,tags: ['prep'] }
-   - { role: hostconf,tags: ['prep'] }
-   - { role: fix_dns,tags: ['prep'] }
-   - { role: system-update,tags: ['prep'] }
-   - { role: fix_dns,tags: ['prep'] }
-   - { role: fix_dns,tags: ['prep'] }
-   - { role: undercloud, tags: ['undercloud'] }
-   - fix_dns
-   - { role: overcloud_nodes, tags: ['overcloud','overcloud_nodes'] }
-   - { role: overcloud_introspection, tags: ['overcloud','overcloud_introspection'] }
-   - { role: overcloud_storage, tags: ['overcloud','overcloud_storage'] }
-   - { role: overcloud_network, tags: ['overcloud','overcloud_network'] }
-   - { role: overcloud_deploy, tags: ['overcloud','overcloud_deploy'] }
+    - name: Define and Configure Undercloud Network
+      role: network
+      tags:
+        - prep
+
+    - name: Fix Lab DNS /etc/resolv.conf
+      role: fix_dns
+      tags:
+        - prep
+
+    - name: Perform Undercloud Host Configuration
+      role: hostconf
+      tags:
+        - prep
+
+    - name: Fix Lab DNS /etc/resolv.conf
+      role: fix_dns
+      tags:
+        - prep
+
+    - name: Perform a System Update on the Undercloud
+      role: system-update
+      tags:
+        - prep
+
+    - name: Configure and Deploy the Undercloud
+      role: undercloud
+      tags:
+        - undercloud
+
+    - name: Fix Lab DNS /etc/resolv.conf
+      role: fix_dns
+      tags:
+        - overcloud
+
+    - name: Configure Overcloud Nodes
+      role: overcloud_nodes
+      tags:
+        - overcloud
+        - overcloud_nodes
+
+    - name: Prepare and Run Overcloud Introspection
+      role: overcloud_introspection
+      tags:
+        - overcloud
+        - overcloud_introspection
+
+    - name: Define Overcloud Storage
+      role: overcloud_storage
+      tags:
+        - overcloud
+        - overcloud_storage
+
+    - name: Define Overcloud Network
+      role: overcloud_network
+      tags:
+        - overcloud
+        - overcloud_network
+
+    - name: Deploy the Overcloud
+      role: overcloud_deploy
+      tags:
+        - overcloud
+        - overcloud_deploy

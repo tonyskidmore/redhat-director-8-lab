@@ -23,9 +23,6 @@
     chdir: "/home/{{ control_user }}"
     creates: stackrc
   register: undercloud_install
-  # wait for job to complete 12200 = 2 hours
-  # async: 12200
-  # poll: 15
   become: no
 
 - name: Show Undercloud Intall Results
@@ -64,6 +61,7 @@
       endpoint_count: "{{ os_catalog | length }}"
     debug:
       msg: "Endpoints found = {{ endpoint_count }}"
+      verbosity: 2
     failed_when: os_catalog | length != undercloud_endpoints
 
   - name: Get subnetid from single ctlplane network

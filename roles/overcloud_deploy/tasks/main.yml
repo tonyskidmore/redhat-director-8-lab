@@ -7,6 +7,17 @@
   changed_when: False
   no_log: True
 
+- name: Pre-Deployment Message
+  vars:
+    msg: |
+      While Overcloud deployment is running it can be monitored by the following steps.
+      1. Open a new SSH session to the workstation.  Expect this to run for 1.5+ hours.
+      2. # ssh stack@undercloud -i /home/stack/.ssh/id_rsa
+      3. # source stackrc
+      4. # watch "heat stack-list --show-nested | grep -v COMP"
+  debug:
+    msg: "{{ msg.split('\n') }}"
+
 - name:  Deploy the Overcloud
   shell: >
     openstack overcloud deploy --templates
