@@ -25,7 +25,7 @@
   register: undercloud_install
   become: no
 
-- name: Show Undercloud Intall Results
+- name: Debug Undercloud Intall Results
   debug:
     var: undercloud_install
     verbosity: 2
@@ -56,7 +56,7 @@
   #  with_items: "{{ os_catalog }}"
 
   # Just count found endpoints - expecting "{{ undercloud_endpoints }}"
-  - name: Check Endpoint Count = {{ undercloud_endpoints }}
+  - name: Debug Endpoint Count = {{ undercloud_endpoints }}
     vars:
       endpoint_count: "{{ os_catalog | length }}"
     debug:
@@ -80,7 +80,7 @@
     register: undercloud_subnetdns
     changed_when: False
 
-  - name: Show current DNS setting
+  - name: Debug current DNS setting
     debug:
       msg: "Current DNS value = {{ undercloud_subnetdns.stdout }}"
       verbosity: 2
@@ -90,7 +90,7 @@
     register: subnet_dns_set
     when: undercloud_subnetdns.stdout != undercloud_dns
 
-  - name: Show updated DNS setting
+  - name: Debug updated DNS setting
     debug:
       msg: "Current DNS value = {{ subnet_dns_set.stdout }}"
       verbosity: 2

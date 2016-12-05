@@ -10,7 +10,7 @@
   register: start_kernel
   changed_when: false
 
-- name: Show kernel
+- name: Debug kernel version
   debug:
     var: start_kernel.stdout
     verbosity: 2
@@ -23,7 +23,7 @@
   register: yum_update
   become: true
 
-- name: Show yum result
+- name: Debug yum result
   debug:
     var: yum_update
     verbosity: 2

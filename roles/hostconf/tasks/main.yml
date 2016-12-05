@@ -18,7 +18,7 @@
   register: service_firewalld
   become: true
 
-- name: Show firewalld variable
+- name: Debug firewalld variable
   debug:
     var: service_firewalld
     verbosity: 2
