@@ -2,8 +2,8 @@
 ## backends. Defaults to Ceph used as a backend for Cinder, Glance and
 ## Nova ephemeral storage.
 
-# resource_registry:
-#   OS::TripleO::NodeUserData: /home/stack/templates/firstboot/wipe-disks.yaml
+resource_registry:
+  OS::TripleO::NodeUserData: /home/stack/templates/firstboot/wipe-disks.yaml
 
 parameter_defaults:
 
@@ -63,5 +63,5 @@ parameter_defaults:
   # CephAdminKey: ''
 
 
-#  ExtraConfig:
-#    ceph::profile::params::osds:
+ ExtraConfig:
+   ceph::profile::params::osds:
