@@ -39,6 +39,12 @@
       tags:
         - undercloud
 
+    - name: Allow NTP Access
+      role: ntp_iptables
+      tags:
+        - prep
+      become: yes
+
     - name: Fix Lab DNS /etc/resolv.conf
       role: fix_dns
       tags:

@@ -1,0 +1,14 @@
+---
+
+- name: Allow NTP Access in iptables
+  iptables_raw:
+    name: allow_udp_123
+    rules: '-A INPUT -p udp -m udp --dport 123 -j ACCEPT'
+  register: ip_tables
+
+- name: restart iptables
+  service: 
+    name: iptables
+    state: restarted
+  when: ip_tables.changed
+
