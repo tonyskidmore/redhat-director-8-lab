@@ -81,7 +81,7 @@ overcloud:
   control_scale: "3"
   compute_scale: "2"
   ceph_storage_scale: "4"
-  ntp_server: "pool.ntp.org"
+  ntp_server: "192.0.2.1"
   neutron_network_type: "vxlan"
   neutron_tunnel_types: "vxlan"
 
