@@ -45,5 +45,13 @@
 
 - name: Generate ntp.conf file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  notify: restart ntp
+  # notify: restart ntp
+  register: ntp_conf
   when: ntp_manage_config
+
+- debug: var=ntp_conf
+
+- name: restart ntp
+  service: "name={{ ntp_daemon }} state=restarted"
+  when: ntp_conf.changed
+
