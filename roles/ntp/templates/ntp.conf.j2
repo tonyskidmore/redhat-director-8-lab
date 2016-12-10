@@ -18,6 +18,8 @@ filegen clockstats file clockstats type day enable
 {% for item in ntp_servers %}
 server {{ item }}
 {% endfor %}
+server 127.127.1.0
+fudge 127.127.1.0 stratum 4
 
 # Permit time synchronization with our time source, but do not
 # permit the source to query or modify the service on this system.
@@ -28,6 +30,7 @@ restrict default nomodify notrap nopeer noquery
 # the administrative functions.
 restrict 127.0.0.1
 restrict ::1
+restrict default nomodify notrap nopeer # noquery
 
 # Clients from this (example!) subnet have unlimited access, but only if
 # cryptographically authenticated.
