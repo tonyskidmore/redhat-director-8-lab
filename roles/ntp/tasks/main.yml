@@ -58,7 +58,7 @@
 - name: restart ntp
   service: 
     name: "{{ ntp_daemon }}"
-    state: restarted"
+    state: restarted
   when: ntp_conf.changed
 
 - name: restart iptables
