@@ -1,0 +1,11 @@
+---
+ntp_enabled: true
+ntp_timezone: Etc/UTC
+
+ntp_manage_config: true
+ntp_servers:
+ - 0.rhel.pool.ntp.org iburst
+ - 1.rhel.pool.ntp.org iburst
+ - 2.rhel.pool.ntp.org iburst
+ - 3.rhel.pool.ntp.org iburst
+

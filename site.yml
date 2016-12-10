@@ -17,6 +17,11 @@
       tags:
         - prep
 
+    - name: Configure NTP Daemon
+      role: ntp
+      tags:
+        - prep
+
     - name: Fix Lab DNS /etc/resolv.conf
       role: fix_dns
       tags:
