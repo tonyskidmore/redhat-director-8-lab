@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo yum makecache fast
 sudo yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 sudo yum -y install ansible git screen
 git clone https://github.com/tonyskidmore/redhat-director-8-lab.git
