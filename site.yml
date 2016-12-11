@@ -39,12 +39,6 @@
       tags:
         - undercloud
 
-    - name: Allow NTP Access
-      role: ntp_iptables
-      tags:
-        - prep
-      become: yes
-
     - name: Fix Lab DNS /etc/resolv.conf
       role: fix_dns
       tags:
@@ -73,6 +67,13 @@
       tags:
         - overcloud
         - overcloud_network
+
+    - name: Allow NTP Access
+      role: iptablesntp
+      tags:
+        - prep
+        - ntp_iptables
+      become: yes
 
     - name: Deploy the Overcloud
       role: overcloud_deploy
