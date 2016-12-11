@@ -10,6 +10,5 @@ sudo ansible-playbook setup.yml
 # read -p "Press any key to begin installation..."
 
 screen -S "shared" -d -m
-screen -r "shared" -X stuff $'cd redhat-director-8-lab\n'
 screen -r "shared" -X stuff $'ansible-playbook site.yml\n'
 screen -x "shared"
