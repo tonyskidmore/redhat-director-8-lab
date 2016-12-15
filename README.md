@@ -24,7 +24,7 @@ Ansible 2.2 or higher. (Ansible is automatically installed using the start.sh sc
 
 If the lab gods are with you after around 2.5 hours you should have a deployed Undercloud and Overcloud.  The configuration for both are defined in the host_vars/undercloud.yml.
 
-As this is a lab the stack user alos gets created on the workstation and the required key is readble by the workstation user.  To access the Undercloud after deployment:
+As this is a lab the stack user also gets created on the workstation and the required key is generated and readble by the workstation user.  To access the Undercloud after deployment:
 
   `# ssh -i /home/stack/.ssh/id_rsa stack@undercloud`
 
