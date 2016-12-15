@@ -28,6 +28,8 @@ As this is a lab the stack user also gets created on the workstation and the req
 
   `# ssh -i /home/stack/.ssh/id_rsa stack@undercloud`
 
+**Note: The OPENTLC are not the most robust of environments and results can vary!**
+
 Author Information
 ------------------
 
